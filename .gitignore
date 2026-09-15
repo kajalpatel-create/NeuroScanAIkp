@@ -1,0 +1,13 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+static/uploads/*
+dataset/
+*.keras
+*.h5
+gradcam_result.png
+*_confusion_matrix.png

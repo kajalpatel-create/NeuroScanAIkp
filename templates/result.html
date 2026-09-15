@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>NeuroScanAI | Analysis Dashboard</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+            line-height: 1.6;
+        }
+
+
+        header {
+            background: linear-gradient(
+                135deg,
+                #071a3d,
+                #0d47a1
+            );
+
+            color: white;
+
+            padding: 20px 7%;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            box-shadow: 0 4px 15px rgba(
+                0,0,0,0.15
+            );
+        }
+
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+
+        .status {
+            background: rgba(
+                255,255,255,0.15
+            );
+
+            padding: 8px 15px;
+
+            border-radius: 20px;
+
+            font-size: 14px;
+        }
+
+
+        .container {
+            width: 90%;
+            max-width: 1250px;
+            margin: 35px auto;
+        }
+
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+
+        .page-title h1 {
+            font-size: 34px;
+            color: #092b63;
+        }
+
+
+        .page-title p {
+            color: #68758a;
+            margin-top: 5px;
+        }
+
+
+        .result-card {
+            background: linear-gradient(
+                135deg,
+                #0d47a1,
+                #1565c0
+            );
+
+            color: white;
+
+            border-radius: 22px;
+
+            padding: 35px;
+
+            text-align: center;
+
+            margin-bottom: 30px;
+
+            box-shadow: 0 10px 30px rgba(
+                13,71,161,0.25
+            );
+        }
+
+
+        .result-icon {
+            font-size: 45px;
+        }
+
+
+        .result-label {
+            font-size: 13px;
+            letter-spacing: 2px;
+            margin-top: 8px;
+            opacity: 0.8;
+        }
+
+
+        .prediction {
+            font-size: 38px;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+
+        .confidence {
+            font-size: 18px;
+        }
+
+
+        .grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 25px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .card {
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+
+            box-shadow: 0 5px 20px rgba(
+                0,0,0,0.07
+            );
+
+            border: 1px solid #e8edf5;
+        }
+
+
+        .full-card {
+            width: 100%;
+        }
+
+
+        .card h2 {
+            color: #092b63;
+            margin-bottom: 8px;
+            font-size: 22px;
+        }
+
+
+        .card-description {
+            color: #6b778a;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+
+        .image-card img {
+            display: block;
+
+            max-width: 100%;
+
+            max-height: 500px;
+
+            margin: 15px auto 0;
+
+            border-radius: 12px;
+
+            border: 1px solid #dfe5ee;
+        }
+
+
+        /* SECOND OPINION */
+
+        .ai-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+        }
+
+
+        .ai-box {
+            padding: 25px;
+
+            border-radius: 16px;
+
+            background: #f5f8fd;
+
+            border: 1px solid #e1e8f3;
+
+            text-align: center;
+        }
+
+
+        .ai-box h3 {
+            color: #164f9e;
+            margin-bottom: 10px;
+        }
+
+
+        .ai-prediction {
+            font-size: 27px;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+
+
+        .ai-confidence {
+            color: #536176;
+        }
+
+
+        .agreement {
+            margin-top: 20px;
+
+            padding: 18px;
+
+            border-radius: 14px;
+
+            text-align: center;
+
+            font-weight: bold;
+
+            background: #eef6ff;
+
+            color: #0d47a1;
+        }
+
+
+        /* TIMELINE */
+
+        .timeline {
+            display: grid;
+
+            grid-template-columns:
+                repeat(6, 1fr);
+
+            gap: 10px;
+
+            margin-top: 25px;
+        }
+
+
+        .timeline-step {
+            text-align: center;
+
+            padding: 15px 8px;
+
+            background: #f4f7fb;
+
+            border-radius: 12px;
+
+            border: 1px solid #e2e8f1;
+        }
+
+
+        .timeline-number {
+            width: 32px;
+            height: 32px;
+
+            margin: auto auto 8px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #0d47a1;
+
+            color: white;
+
+            font-weight: bold;
+        }
+
+
+        .timeline-step span {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+
+        /* PROBABILITY */
+
+        .probability {
+            margin-bottom: 18px;
+        }
+
+
+        .probability-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            font-weight: bold;
+
+            margin-bottom: 7px;
+        }
+
+
+        .bar-background {
+            height: 12px;
+
+            background: #e8edf5;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+        }
+
+
+        .bar {
+            height: 100%;
+
+            background: linear-gradient(
+                90deg,
+                #1565c0,
+                #42a5f5
+            );
+
+            border-radius: 20px;
+        }
+
+
+        /* METRICS */
+
+        .metrics {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 15px;
+        }
+
+
+        .metric {
+            text-align: center;
+
+            background: #f5f8fd;
+
+            padding: 22px 10px;
+
+            border-radius: 14px;
+        }
+
+
+        .metric-value {
+            font-size: 27px;
+
+            font-weight: bold;
+
+            color: #0d47a1;
+        }
+
+
+        .metric-name {
+            color: #68758a;
+
+            font-size: 13px;
+
+            margin-top: 4px;
+        }
+
+
+        /* TABLE */
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            margin-top: 10px;
+        }
+
+
+        th,
+        td {
+            padding: 13px;
+
+            border-bottom: 1px solid #e5eaf1;
+
+            text-align: left;
+        }
+
+
+        th {
+            background: #eef4fc;
+
+            color: #123c78;
+        }
+
+
+        tr:hover {
+            background: #f8faff;
+        }
+
+
+        /* INFORMATION */
+
+        .info-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 18px;
+        }
+
+
+        .info-box {
+            background: #f7f9fc;
+
+            padding: 20px;
+
+            border-radius: 14px;
+
+            border-left: 4px solid #1565c0;
+        }
+
+
+        .info-box h3 {
+            color: #123c78;
+
+            margin-bottom: 7px;
+        }
+
+
+        /* DISCLAIMER */
+
+        .disclaimer {
+            background: #fff8e6;
+
+            border: 1px solid #f0d48a;
+
+            color: #765800;
+
+            padding: 22px;
+
+            border-radius: 15px;
+
+            margin-top: 30px;
+        }
+
+
+        .disclaimer h3 {
+            margin-bottom: 8px;
+        }
+
+
+        .footer {
+            text-align: center;
+
+            color: #7a8596;
+
+            padding: 30px 10px;
+
+            font-size: 13px;
+        }
+
+
+        @media(max-width: 850px) {
+
+            .grid,
+            .ai-grid,
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .metrics {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .timeline {
+                grid-template-columns:
+                    repeat(3, 1fr);
+            }
+
+
+            header {
+                padding: 18px 5%;
+            }
+
+        }
+
+
+        @media(max-width: 500px) {
+
+            .container {
+                width: 94%;
+            }
+
+
+            .page-title h1 {
+                font-size: 27px;
+            }
+
+
+            .prediction {
+                font-size: 30px;
+            }
+
+
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+
+
+            .timeline {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .card {
+                padding: 20px 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header>
+
+    <div class="logo">
+        🧠 NeuroScanAI
+    </div>
+
+    <div class="status">
+        ● AI Analysis Complete
+    </div>
+
+</header>
+
+
+<div class="container">
+
+
+    <!-- =====================================================
+         PAGE TITLE
+    ====================================================== -->
+
+    <div class="page-title">
+
+        <h1>
+            NeuroScanAI Intelligence Dashboard
+        </h1>
+
+        <p>
+            AI-based Brain MRI classification and
+            explainability analysis
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN RESULT
+    ====================================================== -->
+
+    <div class="result-card">
+
+        <div class="result-icon">
+            🧠
+        </div>
+
+        <div class="result-label">
+            PRIMARY AI PREDICTION
+        </div>
+
+        <div class="prediction">
+            {{ prediction }}
+        </div>
+
+        <div class="confidence">
+
+            Model Confidence:
+            <strong>
+                {{ "%.2f"|format(confidence) }}%
+            </strong>
+
+        </div>
+
+        <div style="margin-top:10px; opacity:0.9;">
+
+            {{ confidence_level }}
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         AI SECOND OPINION
+    ====================================================== -->
+
+    <div class="card full-card">
+
+        <h2>
+            🤖 AI Second Opinion
+        </h2>
+
+        <p class="card-description">
+
+            Two independently trained AI models analyse
+            the same MRI image and provide their predictions.
+
+        </p>
+
+
+        <div class="ai-grid">
+
+
+            <!-- CNN -->
+
+            <div class="ai-box">
+
+                <h3>
+                    🧠 Baseline CNN
+                </h3>
+
+                <div class="ai-prediction">
+
+                    {{ cnn_class }}
+
+                </div>
+
+                <div class="ai-confidence">
+
+                    Confidence:
+                    <strong>
+                        {{ "%.2f"|format(cnn_confidence) }}%
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- MobileNet -->
+
+            <div class="ai-box">
+
+                <h3>
+                    🤖 MobileNetV2
+                </h3>
+
+                <div class="ai-prediction">
+
+                    {{ mobile_class }}
+
+                </div>
+
+                <div class="ai-confidence">
+
+                    Confidence:
+                    <strong>
+                        {{ "%.2f"|format(mobile_confidence) }}%
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="agreement">
+
+            {% if consensus %}
+
+                🤝 {{ consensus_status }}
+
+                <br>
+
+                <small>
+                    {{ consensus_message }}
+                </small>
+
+            {% else %}
+
+                ⚠️ {{ consensus_status }}
+
+                <br>
+
+                <small>
+                    {{ consensus_message }}
+                </small>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ANALYSIS TIMELINE
+    ====================================================== -->
+
+    <div class="card full-card">
+
+        <h2>
+            🔄 AI Analysis Pipeline
+        </h2>
+
+        <p class="card-description">
+
+            NeuroScanAI follows a multi-stage analysis
+            pipeline from image upload to explainable AI.
+
+        </p>
+
+
+        <div class="timeline">
+
+
+            <div class="timeline-step">
+
+                <div class="timeline-number">
+                    1
+                </div>
+
+                <span>
+                    Image Upload
+                </span>
+
+            </div>
+
+
+            <div class="timeline-step">
+
+                <div class="timeline-number">
+                    2
+                </div>
+
+                <span>
+                    Preprocessing
+                </span>
+
+            </div>
+
+
+            <div class="timeline-step">
+
+                <div class="timeline-number">
+                    3
+                </div>
+
+                <span>
+                    CNN Analysis
+                </span>
+
+            </div>
+
+
+            <div class="timeline-step">
+
+                <div class="timeline-number">
+                    4
+                </div>
+
+                <span>
+                    Second Opinion
+                </span>
+
+            </div>
+
+
+            <div class="timeline-step">
+
+                <div class="timeline-number">
+                    5
+                </div>
+
+                <span>
+                    Grad-CAM
+                </span>
+
+            </div>
+
+
+            <div class="timeline-step">
+
+                <div class="timeline-number">
+                    6
+                </div>
+
+                <span>
+                    Final Result
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MRI IMAGES
+    ====================================================== -->
+
+    <div class="grid">
+
+
+        <!-- ORIGINAL -->
+
+        <div class="card image-card">
+
+            <h2>
+                🖼️ Original MRI
+            </h2>
+
+            <p class="card-description">
+
+                Uploaded MRI image used for AI analysis.
+
+            </p>
+
+            <img
+                src="{{ url_for(
+                    'static',
+                    filename='uploads/' + filename
+                ) }}"
+                alt="Original MRI">
+
+        </div>
+
+
+        <!-- PREPROCESSED -->
+
+        <div class="card image-card">
+
+            <h2>
+                🔬 Preprocessed MRI
+            </h2>
+
+            <p class="card-description">
+
+                The image is resized to
+                128 × 128 pixels before CNN analysis.
+
+            </p>
+
+            <img
+                src="{{ url_for(
+                    'static',
+                    filename=preprocessed_filename
+                ) }}"
+                alt="Preprocessed MRI">
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         CNN PROBABILITIES
+    ====================================================== -->
+
+    <div class="card full-card">
+
+        <h2>
+            📊 CNN Class-wise Probability
+        </h2>
+
+        <p class="card-description">
+
+            Probability scores generated by the primary
+            CNN model for each MRI category.
+
+        </p>
+
+
+        {% for class_name, probability
+           in cnn_probabilities.items() %}
+
+
+        <div class="probability">
+
+            <div class="probability-header">
+
+                <span>
+                    {{ class_name }}
+                </span>
+
+                <span>
+                    {{ probability }}%
+                </span>
+
+            </div>
+
+
+            <div class="bar-background">
+
+                <div
+                    class="bar"
+                    style="width: {{ probability }}%;">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- =====================================================
+         MOBILENET PROBABILITIES
+    ====================================================== -->
+
+    <div class="card full-card">
+
+        <h2>
+            🤖 MobileNetV2 Probability
+        </h2>
+
+        <p class="card-description">
+
+            Independent probability scores generated by
+            the MobileNetV2 transfer-learning model.
+
+        </p>
+
+
+        {% for class_name, probability
+           in mobile_probabilities.items() %}
+
+
+        <div class="probability">
+
+            <div class="probability-header">
+
+                <span>
+                    {{ class_name }}
+                </span>
+
+                <span>
+                    {{ probability }}%
+                </span>
+
+            </div>
+
+
+            <div class="bar-background">
+
+                <div
+                    class="bar"
+                    style="width: {{ probability }}%;">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- =====================================================
+         GRAD-CAM
+    ====================================================== -->
+
+    <div class="card full-card image-card">
+
+        <h2>
+            🔥 Explainable AI — Grad-CAM
+        </h2>
+
+        <p class="card-description">
+
+            Grad-CAM visualizes image regions that contributed
+            to the CNN prediction. It is an interpretability
+            technique and does not confirm the actual location
+            of a tumor.
+
+        </p>
+
+
+        {% if gradcam_available %}
+
+        <img
+            src="{{ url_for(
+                'static',
+                filename=gradcam_filename
+            ) }}"
+            alt="Grad-CAM Visualization">
+
+        {% else %}
+
+        <p>
+            Grad-CAM visualization could not be generated
+            for this image.
+        </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- =====================================================
+         DATA AUGMENTATION
+    ====================================================== -->
+
+    <div class="card full-card image-card">
+
+        <h2>
+            🔄 Data Augmentation
+        </h2>
+
+        <p class="card-description">
+
+            During training, augmentation generated
+            variations through rotation, shifting,
+            zooming and horizontal flipping.
+
+        </p>
+
+
+        <img
+            src="{{ url_for(
+                'static',
+                filename='augmentation_visualization.png'
+            ) }}"
+            alt="Data Augmentation">
+
+    </div>
+
+
+    <!-- =====================================================
+         DATASET
+    ====================================================== -->
+
+    <div class="card full-card image-card">
+
+        <h2>
+            🗂️ Dataset Distribution
+        </h2>
+
+        <p class="card-description">
+
+            The dataset contains four balanced MRI
+            categories: Glioma, Meningioma, No Tumor
+            and Pituitary.
+
+        </p>
+
+
+        <img
+            src="{{ url_for(
+                'static',
+                filename='dataset_distribution.png'
+            ) }}"
+            alt="Dataset Distribution">
+
+    </div>
+
+
+    <!-- =====================================================
+         PRIMARY MODEL PERFORMANCE
+    ====================================================== -->
+
+    <div class="card full-card">
+
+        <h2>
+            📈 CNN Model Performance
+        </h2>
+
+        <p class="card-description">
+
+            Performance of the baseline CNN on the
+            independent test dataset.
+
+        </p>
+
+
+        <div class="metrics">
+
+
+            {% for metric, value
+               in model_metrics.items() %}
+
+
+            <div class="metric">
+
+                <div class="metric-value">
+                    {{ value }}
+                </div>
+
+                <div class="metric-name">
+                    {{ metric }}
+                </div>
+
+            </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MODEL COMPARISON
+    ====================================================== -->
+
+    <div class="card full-card">
+
+        <h2>
+            ⚖️ CNN vs MobileNetV2
+        </h2>
+
+        <p class="card-description">
+
+            Comparison of both models using the same
+            independent test dataset.
+
+        </p>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <tr>
+
+                    <th>
+                        Metric
+                    </th>
+
+                    <th>
+                        CNN
+                    </th>
+
+                    <th>
+                        MobileNetV2
+                    </th>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        Test Accuracy
+                    </td>
+
+                    <td>
+                        {{ model_comparison["CNN"]["Accuracy"] }}
+                    </td>
+
+                    <td>
+                        {{ model_comparison["MobileNetV2"]["Accuracy"] }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        Precision
+                    </td>
+
+                    <td>
+                        {{ model_comparison["CNN"]["Precision"] }}
+                    </td>
+
+                    <td>
+                        {{ model_comparison["MobileNetV2"]["Precision"] }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        Recall
+                    </td>
+
+                    <td>
+                        {{ model_comparison["CNN"]["Recall"] }}
+                    </td>
+
+                    <td>
+                        {{ model_comparison["MobileNetV2"]["Recall"] }}
+                    </td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        F1-Score
+                    </td>
+
+                    <td>
+                        {{ model_comparison["CNN"]["F1-Score"] }}
+                    </td>
+
+                    <td>
+                        {{ model_comparison["MobileNetV2"]["F1-Score"] }}
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </div>
+
+
+        <p class="card-description"
+           style="margin-top:20px;">
+
+            The baseline CNN achieved a slightly higher
+            independent test accuracy than MobileNetV2.
+
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         CLASS PERFORMANCE
+    ====================================================== -->
+
+    <div class="card full-card">
+
+        <h2>
+            📋 Class-wise Performance
+        </h2>
+
+        <p class="card-description">
+
+            Precision, recall and F1-score obtained for
+            each MRI category on the independent test set.
+
+        </p>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <tr>
+
+                    <th>Class</th>
+
+                    <th>Precision</th>
+
+                    <th>Recall</th>
+
+                    <th>F1-Score</th>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>Glioma</td>
+
+                    <td>0.84</td>
+
+                    <td>0.69</td>
+
+                    <td>0.76</td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>Meningioma</td>
+
+                    <td>0.79</td>
+
+                    <td>0.76</td>
+
+                    <td>0.77</td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>No Tumor</td>
+
+                    <td>0.81</td>
+
+                    <td>1.00</td>
+
+                    <td>0.89</td>
+
+                </tr>
+
+
+                <tr>
+
+                    <td>Pituitary</td>
+
+                    <td>0.94</td>
+
+                    <td>0.93</td>
+
+                    <td>0.94</td>
+
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CONFUSION MATRIX
+    ====================================================== -->
+
+    <div class="card full-card image-card">
+
+        <h2>
+            🧩 Confusion Matrix
+        </h2>
+
+        <p class="card-description">
+
+            Shows correctly and incorrectly classified
+            MRI images for each class.
+
+        </p>
+
+
+        <img
+            src="{{ url_for(
+                'static',
+                filename='confusion_matrix.png'
+            ) }}"
+            alt="Confusion Matrix">
+
+    </div>
+
+
+    <!-- =====================================================
+         ROC CURVE
+    ====================================================== -->
+
+    <div class="card full-card image-card">
+
+        <h2>
+            📈 ROC Curve & AUC
+        </h2>
+
+        <p class="card-description">
+
+            The ROC curve evaluates the classification
+            performance across different decision thresholds.
+
+        </p>
+
+
+        <img
+            src="{{ url_for(
+                'static',
+                filename='roc_curve.png'
+            ) }}"
+            alt="ROC Curve and AUC">
+
+    </div>
+
+
+    <!-- =====================================================
+         EDUCATIONAL CLASS INFORMATION
+    ====================================================== -->
+
+    <div class="card full-card">
+
+        <h2>
+            📚 MRI Class Explorer
+        </h2>
+
+        <p class="card-description">
+
+            General educational information about the
+            categories used by the research model.
+
+        </p>
+
+
+        <div class="info-grid">
+
+
+            <div class="info-box">
+
+                <h3>
+                    🧠 Glioma
+                </h3>
+
+                <p>
+                    Glioma is a group of tumors that arise
+                    from glial cells in the nervous system.
+                    The model treats it as one classification
+                    category.
+                </p>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <h3>
+                    🧠 Meningioma
+                </h3>
+
+                <p>
+                    Meningioma is a tumor that develops from
+                    the meninges, the protective layers around
+                    the brain and spinal cord.
+                </p>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <h3>
+                    🧠 No Tumor
+                </h3>
+
+                <p>
+                    This category represents MRI images in
+                    the dataset that are labelled as not
+                    containing a tumor.
+                </p>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <h3>
+                    🧠 Pituitary
+                </h3>
+
+                <p>
+                    Pituitary tumors are abnormal growths
+                    involving the pituitary gland. The model
+                    treats this as a separate classification
+                    category.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         DISCLAIMER
+    ====================================================== -->
+
+    <div class="disclaimer">
+
+        <h3>
+            ⚠️ Research & Educational Disclaimer
+        </h3>
+
+        <p>
+
+            NeuroScanAI is an educational and research
+            prototype developed for brain MRI image
+            classification. The displayed prediction and
+            confidence represent model outputs and must not
+            be considered a medical diagnosis.
+
+            Grad-CAM represents model activation patterns
+            and does not prove the actual location or presence
+            of a tumor.
+
+            Any medical interpretation should be performed
+            by a qualified healthcare professional.
+
+        </p>
+
+    </div>
+
+
+</div>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<div class="footer">
+
+    NeuroScanAI • AI-based Brain MRI Research Prototype
+
+    <br>
+
+    Educational use only
+
+</div>
+
+
+</body>
+
+</html>

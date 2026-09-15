@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>NeuroScanAI | AI Brain MRI Analysis</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f9fd;
+            color: #17324d;
+        }
+
+        /* HEADER */
+
+        header {
+            background: rgba(255,255,255,0.96);
+            height: 72px;
+            padding: 0 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: bold;
+            color: #1261a0;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #456;
+            margin-left: 25px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        /* HERO */
+
+        .hero {
+            min-height: 650px;
+            padding: 70px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+            background:
+                radial-gradient(circle at 85% 20%,
+                #dff3ff 0,
+                #f5f9fd 38%);
+        }
+
+        .hero-text {
+            max-width: 620px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 14px;
+            background: #e4f3ff;
+            color: #1261a0;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 18px;
+        }
+
+        .hero-text h1 {
+            font-size: 54px;
+            line-height: 1.1;
+            margin-bottom: 22px;
+        }
+
+        .hero-text h1 span {
+            color: #1261a0;
+        }
+
+        .hero-text p {
+            color: #5d7183;
+            font-size: 18px;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .start-btn {
+            display: inline-block;
+            padding: 15px 25px;
+            background: #1261a0;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(18,97,160,0.22);
+        }
+
+        /* SCAN CARD */
+
+        .scan-card {
+            width: 430px;
+            background: white;
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 15px 40px rgba(30,80,120,0.15);
+            text-align: center;
+        }
+
+        .scan-icon {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: #e8f5ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+        }
+
+        .scan-card h2 {
+            font-size: 25px;
+            margin-bottom: 10px;
+        }
+
+        .scan-card p {
+            color: #71808c;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .upload-area {
+            border: 2px dashed #9fc8e8;
+            border-radius: 15px;
+            padding: 25px 15px;
+            background: #f8fcff;
+            margin-bottom: 18px;
+        }
+
+        .upload-label {
+            display: block;
+            color: #1261a0;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .upload-label span {
+            display: block;
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .analyze-btn {
+            width: 100%;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            background: #1261a0;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .analyze-btn:hover,
+        .start-btn:hover {
+            background: #0c4d80;
+        }
+
+        .supported {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #8795a1;
+        }
+
+        /* FEATURES */
+
+        .features {
+            padding: 75px 7%;
+            background: white;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 34px;
+            margin-bottom: 12px;
+        }
+
+        .section-subtitle {
+            color: #71808c;
+            max-width: 650px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        .feature-container {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .feature {
+            width: 280px;
+            min-height: 190px;
+            padding: 30px;
+            background: #f6faff;
+            border: 1px solid #e1edf6;
+            border-radius: 18px;
+        }
+
+        .feature-icon {
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+
+        .feature h3 {
+            color: #1261a0;
+            margin-bottom: 10px;
+        }
+
+        .feature p {
+            color: #71808c;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        /* ABOUT */
+
+        .about {
+            padding: 70px 7%;
+            text-align: center;
+            background: #eef7fd;
+        }
+
+        .about-box {
+            max-width: 850px;
+            margin: auto;
+        }
+
+        .about p {
+            color: #5d7183;
+            line-height: 1.8;
+        }
+
+        /* DISCLAIMER */
+
+        .disclaimer {
+            max-width: 850px;
+            margin: 35px auto 0;
+            background: #fff8e5;
+            border-left: 5px solid #e4a11b;
+            padding: 18px;
+            text-align: left;
+            border-radius: 8px;
+            color: #66542c;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #102a43;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            font-size: 14px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 850px) {
+
+            header {
+                padding: 0 5%;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 50px 5%;
+            }
+
+            .hero-text h1 {
+                font-size: 40px;
+            }
+
+            .hero-text p {
+                font-size: 16px;
+            }
+
+            .scan-card {
+                width: 100%;
+                max-width: 430px;
+            }
+
+            .start-btn {
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (max-width: 450px) {
+
+            .logo {
+                font-size: 19px;
+            }
+
+            .hero-text h1 {
+                font-size: 34px;
+            }
+
+            .scan-card {
+                padding: 25px 18px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<header>
+
+    <div class="logo">
+        🧠 NeuroScanAI
+    </div>
+
+    <nav>
+
+        <a href="#">Home</a>
+
+        <a href="#features">
+            Features
+        </a>
+
+        <a href="#about">
+            About
+        </a>
+
+    </nav>
+
+</header>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+
+    <div class="hero-text">
+
+        <div class="badge">
+            AI-BASED BRAIN MRI ANALYSIS
+        </div>
+
+        <h1>
+            Intelligent
+            <span>Brain MRI</span>
+            Analysis
+        </h1>
+
+        <p>
+
+            NeuroScanAI is an Artificial Intelligence
+            based educational and research prototype
+            designed to classify brain MRI images into
+            four categories using a trained deep learning
+            model.
+
+        </p>
+
+        <a href="#scan"
+           class="start-btn">
+
+            Start MRI Analysis →
+
+        </a>
+
+    </div>
+
+
+    <!-- SCAN CARD -->
+
+    <div class="scan-card"
+         id="scan">
+
+
+        <div class="scan-icon">
+            🧠
+        </div>
+
+
+        <h2>
+            Analyze MRI Scan
+        </h2>
+
+
+        <p>
+
+            Upload a brain MRI image and let
+            NeuroScanAI generate an AI-based
+            classification result.
+
+        </p>
+
+
+        <form action="/upload"
+              method="POST"
+              enctype="multipart/form-data">
+
+
+            <div class="upload-area">
+
+                <label class="upload-label">
+
+                    <span>📁</span>
+
+                    Choose MRI Image
+
+                    <input
+                        type="file"
+                        name="image"
+                        accept="image/*"
+                        required>
+
+                </label>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="analyze-btn">
+
+                🔍 Analyze MRI
+
+            </button>
+
+
+        </form>
+
+
+        <div class="supported">
+
+            Supported image formats:
+            JPG, JPEG, PNG
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+<!-- FEATURES -->
+
+<section class="features"
+         id="features">
+
+
+    <h2 class="section-title">
+        NeuroScanAI Features
+    </h2>
+
+
+    <p class="section-subtitle">
+
+        The system combines deep learning,
+        image preprocessing and model
+        interpretability techniques for
+        brain MRI classification.
+
+    </p>
+
+
+    <div class="feature-container">
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🤖
+            </div>
+
+            <h3>
+                CNN Classification
+            </h3>
+
+            <p>
+
+                A trained Convolutional Neural
+                Network classifies MRI images
+                into four categories.
+
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🔬
+            </div>
+
+            <h3>
+                Grad-CAM
+            </h3>
+
+            <p>
+
+                Provides an interpretable
+                visualization of image regions
+                influencing the model output.
+
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                📊
+            </div>
+
+            <h3>
+                Model Evaluation
+            </h3>
+
+            <p>
+
+                Includes accuracy, precision,
+                recall, F1-score, confusion
+                matrix and ROC-AUC analysis.
+
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+<!-- ABOUT -->
+
+<section class="about"
+         id="about">
+
+
+    <div class="about-box">
+
+
+        <h2 class="section-title">
+            About NeuroScanAI
+        </h2>
+
+
+        <p>
+
+            NeuroScanAI is a student research
+            project exploring the application
+            of Artificial Intelligence and
+            deep learning in brain MRI image
+            classification.
+
+            The system uses a four-class dataset
+            containing Glioma, Meningioma,
+            No Tumor and Pituitary categories.
+
+        </p>
+
+
+        <div class="disclaimer">
+
+            <strong>Educational Prototype:</strong>
+
+            NeuroScanAI is developed for
+            educational and research purposes.
+            Its predictions are model outputs
+            and should not be considered a
+            medical diagnosis. Clinical decisions
+            must be made by qualified
